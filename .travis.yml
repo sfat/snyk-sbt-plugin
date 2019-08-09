@@ -41,11 +41,6 @@ jobs:
         - npm test
         - npm run test-system
     -
-      env: JDK=8
-      script:
-        - npm test
-        - npm run test-system
-    -
       env: JDK=12
       script:
         - npm test
