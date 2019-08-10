@@ -39,7 +39,7 @@ test('run inspect() on 1.2.8', async (t) => {
 
 test('run inspect() with coursier on 0.17', async (t) => {
   const result: any  = await plugin.inspect(path.join(__dirname, '..', 'fixtures'),
-    'testproj-coursier-0.13/build.sbt', {});
+    'testproj-coursier-0.13/build.sbt', { debug: true});
   // TODO: fix to get the project name from build.sbt
   // for coursier project
   // t.equal(result.package.version, '0.1.0-SNAPSHOT')
@@ -58,7 +58,7 @@ test('run inspect() with coursier on 0.17', async (t) => {
 
 test('run inspect() with coursier on 1.2.8', async (t) => {
   const result: any  = await plugin.inspect(path.join(__dirname, '..', 'fixtures'),
-    'testproj-coursier-1.2.8/build.sbt', {});
+    'testproj-coursier-1.2.8/build.sbt', { debug: true});
   // TODO: fix to get the project name from build.sbt
   // for coursier project
   // t.equal(result.package.version, '0.1.0-SNAPSHOT');
