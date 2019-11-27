@@ -76,10 +76,9 @@ test('run inspect() with commented out coursier on 0.13', async (t) => {
     __dirname, '..', 'fixtures', 'testproj-faux-coursier-0.13'),
   'build.sbt', {});
   // top level package is not added as a dep on windows
-  t.equal(result.package.version, '0.1.0-SNAPSHOT');
-  t.match(result.package.name, 'hello');
+  t.equal(result.package.version, '1.4');
+  t.match(result.package.name, 'axis:axis');
   t.deepEqual(result.package
-    .dependencies['axis:axis']
     .dependencies['axis:axis-jaxrpc']
     .dependencies['org.apache.axis:axis-jaxrpc'].version,
   '1.4',
