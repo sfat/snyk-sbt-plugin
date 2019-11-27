@@ -23,7 +23,7 @@ export async function inspect(root, targetFile, options): Promise<types.PluginRe
   const isCoursierPresent = coursierPluginInProject(root, targetFile);
   const isSbtDependencyGraphPresent = sbtDependencyGraphInProject(root, targetFile);
   Object.assign(options, { isCoursierPresent });
-  if (!isCoursierPresent && !isSbtDependencyGraphPresent) {
+  if (!isCoursierPresent && isSbtDependencyGraphPresent) {
     debug('coursier not detected, applying plugin inspect');
     const res = await pluginInspect(root, targetFile, options);
     if (res) {
