@@ -40,6 +40,7 @@ export const execute = (
         proc.stdin.write('q\r\n');
         debugLogging('sbt is requiring input. Provided (q)uit signal. ' +
           'There is no current workaround for this, see: https://stackoverflow.com/questions/21484166');
+        proc.stdin.end();
       }
     });
 
