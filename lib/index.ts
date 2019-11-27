@@ -21,8 +21,9 @@ export async function inspect(root, targetFile, options): Promise<types.PluginRe
   }
 
   const isCoursierPresent = coursierPluginInProject(root, targetFile);
+  const isSbtDependencyGraphPresent = sbtDependencyGraphInProject(root, targetFile);
   Object.assign(options, { isCoursierPresent });
-  if (!isCoursierPresent) {
+  if (!isCoursierPresent && !isSbtDependencyGraphPresent) {
     debug('coursier not detected, applying plugin inspect');
     const res = await pluginInspect(root, targetFile, options);
     if (res) {
@@ -178,14 +179,26 @@ function getSbtVersion(root: string, targetFile: string): string {
     .split(/=\s*/)[1].trim(); // return only the version
 }
 
- // guess whether we have the couriser plugin by looking for sbt-coursier
+ // guess whether we have the coursier plugin by looking for sbt-coursier
 // in project and project/project
 function coursierPluginInProject(root: string, targetFile: string): boolean {
   const basePath = path.dirname(path.resolve(root, targetFile));
   const sbtFileList = sbtFiles(path.join(basePath, 'project'))
     .concat(sbtFiles(path.join(basePath, 'project', 'project')));
   const searchResults = sbtFileList.map ((file) => {
-    return searchWithFs(file);
+    return searchWithFs(file, 'sbt-coursier');
+  });
+  return searchResults.filter(Boolean).length > 0;
+}
+
+// guess whether we have the sbt-dependency-graph dependency by looking
+// in project and project/project
+function sbtDependencyGraphInProject(root: string, targetFile: string): boolean {
+  const basePath = path.dirname(path.resolve(root, targetFile));
+  const sbtFileList = sbtFiles(path.join(basePath, 'project'))
+  .concat(sbtFiles(path.join(basePath, 'project', 'project')));
+  const searchResults = sbtFileList.map ((file) => {
+    return searchWithFs(file, 'sbt-dependency-graph');
   });
   return searchResults.filter(Boolean).length > 0;
 }
@@ -202,9 +215,9 @@ function sbtFiles(basePath) {
   return [];
 }
 
-function searchWithFs( filename ) {
+function searchWithFs(filename, word) {
   const buffer = fs.readFileSync(filename);
-  return buffer.indexOf('sbt-coursier') > -1;
+  return buffer.indexOf(word) > -1;
 }
 
 export function buildArgs(sbtArgs, isCoursierProject?: boolean, isOutputGraph?: boolean) {
