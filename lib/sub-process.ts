@@ -1,6 +1,7 @@
 import * as childProcess from 'child_process';
 import * as treeKill from 'tree-kill';
 import * as debugModule from 'debug';
+import * as stream from "stream";
 
 // To enable debugging output, run the CLI as `DEBUG=snyk-sbt-plugin snyk ...`
 const debugLogging = debugModule('snyk-sbt-plugin');
@@ -37,7 +38,10 @@ export const execute = (
         debugLogging(str);
       });
       if (strData.includes('(q)uit')) {
-        proc.stdin.write('q\r\n');
+        const stdinStream = new stream.Readable();
+        stdinStream.push('q\r\n');
+        // proc.stdin.write('q\n');
+        stdinStream.pipe(proc.stdin);
         debugLogging('sbt is requiring input. Provided (q)uit signal. ' +
           'There is no current workaround for this, see: https://stackoverflow.com/questions/21484166');
         proc.stdin.end();
@@ -65,6 +69,7 @@ export const execute = (
       }
       resolve(out.stdout);
     });
+    proc.stdin.end();
   });
 };
 
