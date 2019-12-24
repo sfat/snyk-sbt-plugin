@@ -33,7 +33,7 @@ jobs:
     -
       env: JDK=12
       script:
-        - sdk install java $(sdk list java | grep -o -m1 "$JDK\.[0-9\.]*hs-adpt")
+        - sdk install java $(sdk list java | grep -o -m1 "$JDK\.[0-9\.]*j9-adpt")
         - java -version
         - npm test
         - npm run test-system
