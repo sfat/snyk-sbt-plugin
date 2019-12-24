@@ -30,40 +30,10 @@ before_install:
 
 jobs:
   include:
-    - stage: Node versions
-      node_js: 6
-      env: JDK=9
-      script:
-        - sdk install java $(sdk list java | grep -o -m1 "$JDK\.[0-9\.]*hs-adpt") | true
-        - java -version
-        - npm test
-        - npm run test-system
-    -
-      node_js: 8
-      env: JDK=10
-      script:
-        - sdk install java $(sdk list java | grep -o -m1 "$JDK\.[0-9\.]*hs-adpt") | true
-        - java -version
-        - npm test
-        - npm run test-system
-    -
-      node_js: 10
-      env: JDK=11
-      script:
-        - java -version
-        - npm test
-        - npm run test-system
-    - stage: Old and newer Java versions
-      env: JDK=8
-      script:
-        - sdk install java $(sdk list java | grep -o -m1 "$JDK\.[0-9\.]*hs-adpt") | true
-        - java -version
-        - npm test
-        - npm run test-system
     -
       env: JDK=12
       script:
-        - sdk install java $(sdk list java | grep -o -m1 "$JDK\.[0-9\.]*hs-adpt") | true
+        - sdk install java $(sdk list java | grep -o -m1 "$JDK\.[0-9\.]*hs-adpt")
         - java -version
         - npm test
         - npm run test-system
